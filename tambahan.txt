@@ -1,0 +1,12 @@
+
+
+1. Barang Limit >> Setting Jumlah limit tiap barang (show dashboard notification)
+2. tabel Sumber barang >> Suplayer
+4. Catatan request barang oleh admin ke Suplayer.
+
+
+
+
+
+
+
