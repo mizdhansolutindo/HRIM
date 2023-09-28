@@ -36,6 +36,9 @@
                                       <center>Jabatan
                                    </th>
                                    <th>
+                                      <center>Tgl Absensi
+                                   </th>
+                                   <th>
                                       <center>Shift
                                    </th>
                                    <th>
@@ -74,6 +77,9 @@
                                       <td>
                                          <center>
                                             <span class="text-muted"> <strong><?= $row->nama_jabatan; ?></strong></span>
+                                      </td>
+                                      <td>
+                                         <center><input type="date" class="form-control form-control-sm" name="tanggal[]" placeholder="00.00" style="width: 190px;">
                                       </td>
                                       <td>
                                          <center>

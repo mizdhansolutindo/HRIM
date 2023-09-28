@@ -25,11 +25,12 @@ class Absensi extends CI_Controller
 
       $data['absen'] = $this->db->query("SELECT * FROM absen
         INNER JOIN karyawan ON karyawan.user_id = absen.user_id
-        ORDER BY absen.waktu DESC")->result();
+        ORDER BY absen.tanggal DESC")->result();
 
       $data['add'] = $this->db->query("
             SELECT * FROM karyawan
             LEFT JOIN jabatan ON jabatan.id_jabatan = karyawan.id_jabatan
+            LEFT JOIN departement ON departement.id_departement = karyawan.id_departement
             GROUP BY karyawan.user_id
             ORDER BY karyawan.user_id DESC")->result();
 
@@ -62,27 +63,27 @@ class Absensi extends CI_Controller
          // Mulai dari indeks 1 untuk menghindari baris judul (header)
          for ($i = 1; $i < count($rows); $i++) {
             $user_id = $rows[$i][0];
-            $lokasi_kerja = $rows[$i][1];
-            $shift_line = $rows[$i][2];
-            $aktivitas = $rows[$i][3];
-            $kondisi_kesehatan = $rows[$i][4];
-            $waktu = $rows[$i][5];
-            $keterangan = $rows[$i][6];
-            $estimated = $rows[$i][7];
-            $kinerja = $rows[$i][8];
+            $shift = $rows[$i][1];
+            $status = $rows[$i][2];
+            $jam_masuk_reguler = $rows[$i][3];
+            $jam_pulang_reguler = $rows[$i][4];
+            $jam_masuk_lembur = $rows[$i][5];
+            $jam_pulang_lembur = $rows[$i][6];
+            $aktivitas = $rows[$i][7];
+            $tanggal = $rows[$i][8];
 
             // Validasi data sebelum dimasukkan ke dalam database
             if (!empty($user_id)) {
                $data = array(
                   'user_id' => $user_id,
-                  'lokasi_kerja' => $lokasi_kerja,
-                  'shift_line' => $shift_line,
+                  'shift' => $shift,
+                  'status' => $status,
+                  'jam_masuk_reguler' => $jam_masuk_reguler,
+                  'jam_pulang_reguler' => $jam_pulang_reguler,
+                  'jam_masuk_lembur' => $jam_masuk_lembur,
+                  'jam_pulang_lembur' => $jam_pulang_lembur,
                   'aktivitas' => $aktivitas,
-                  'kondisi_kesehatan' => $kondisi_kesehatan,
-                  'waktu' => $waktu,
-                  'keterangan' => $keterangan,
-                  'estimated' => $estimated,
-                  'kinerja' => $kinerja,
+                  'tanggal' => $tanggal,
                );
                $this->db->insert('absen', $data);
             } else {
@@ -90,7 +91,7 @@ class Absensi extends CI_Controller
          }
 
          // Setelah selesai, arahkan pengguna ke halaman yang sesuai
-         $this->session->set_flashdata('success', 'Data absensi berhasil diunggah');
+         $this->session->set_flashdata('success', 'Data absensi berhasil di upload');
          redirect('other/absensi');
       }
    }
@@ -115,19 +116,17 @@ class Absensi extends CI_Controller
    {
       // Ambil data dari form
       $user_id = $this->input->post('user_id');
-      $waktu = $this->input->post('waktu');
-      $lokasi_kerja = $this->input->post('lokasi_kerja');
-      $shift_line = $this->input->post('shift_line');
+      $shift = $this->input->post('shift');
+      $status = $this->input->post('status');
+      $jam_masuk_reguler = $this->input->post('jam_masuk_reguler');
+      $jam_pulang_reguler = $this->input->post('jam_pulang_reguler');
+      $jam_masuk_lembur = $this->input->post('jam_masuk_lembur');
+      $jam_pulang_lembur = $this->input->post('jam_pulang_lembur');
       $aktivitas = $this->input->post('aktivitas');
-      $keterangan = $this->input->post('keterangan');
-      $kondisi_kesehatan = $this->input->post('kondisi_kesehatan');
-      $kinerja = $this->input->post('kinerja');
-      $catatan = $this->input->post('catatan');
-      $jam_masuk_alternatif = $this->input->post('jam_masuk_alternatif');
-      $jam_pulang_alternatif = $this->input->post('jam_pulang_alternatif');
+      $tanggal = $this->input->post('tanggal');
 
       // Tambahkan tgl_pembayaran dengan tanggal hari ini
-      $curdatetime = date('Y-m-d H:i:s'); // Format tanggal dan waktu MySQL (YYYY-MM-DD HH:MM:SS)
+      $time = date('Y-m-d');
 
       // Inisialisasi array untuk mengumpulkan data yang akan disimpan
       $data_to_insert = array();
@@ -136,33 +135,28 @@ class Absensi extends CI_Controller
       $data_missing = false; // Flag untuk menandakan apakah ada data yang belum ada di database
       for ($i = 0; $i < count($user_id); $i++) {
          $user_id_value = $user_id[$i];
-         $time = $curdatetime;
 
-         // Menghitung jumlah inputan 'masuk' atau 'pulang' untuk tanggal dan user_id tertentu
+         // Periksa apakah data sudah ada di database untuk user_id dan tanggal tertentu
          $this->db->where('user_id', $user_id_value);
-         $this->db->where('DATE(waktu)', date('Y-m-d', strtotime($time)));
-         $this->db->where_in('keterangan', array('masuk', 'pulang')); // Validasi berdasarkan keterangan
-         $existingDataCount = $this->db->count_all_results('absen');
+         $this->db->where('tanggal', $time);
+         $query = $this->db->get('absen');
 
-         // Jika sudah ada dua inputan 'masuk' atau 'pulang' untuk tanggal dan user_id tertentu, skip inputan ini
-         if ($existingDataCount >= 2) {
+         // Jika sudah ada data, skip inputan ini
+         if ($query->num_rows() >= 1) {
             continue;
          }
 
          // Tambahkan data ke array data_to_insert
          $data_to_insert[] = array(
             'user_id' => $user_id_value,
-            'lokasi_kerja' => $lokasi_kerja[$i],
-            'shift_line' => $shift_line[$i],
+            'shift' => $shift[$i],
+            'status' => $status[$i],
+            'jam_masuk_reguler' => $jam_masuk_reguler[$i],
+            'jam_pulang_reguler' => $jam_pulang_reguler[$i],
+            'jam_masuk_lembur' => $jam_masuk_lembur[$i],
+            'jam_pulang_lembur' => $jam_pulang_lembur[$i],
             'aktivitas' => $aktivitas[$i],
-            'kondisi_kesehatan' => $kondisi_kesehatan[$i],
-            'keterangan' => $keterangan[$i],
-            'kinerja' => $kinerja[$i],
-            'waktu' => $waktu[$i],
-            'catatan' => $catatan[$i],
-            'jam_masuk_alternatif' => $jam_masuk_alternatif[$i],
-            'jam_pulang_alternatif' => $jam_pulang_alternatif[$i],
-            'estimated' => $waktu[$i],
+            'tanggal' => $tanggal[$i],
          );
          $data_missing = true; // Set flag bahwa ada data yang belum ada di database
       }
@@ -171,7 +165,7 @@ class Absensi extends CI_Controller
       if ($data_missing) {
          $this->db->insert_batch('absen', $data_to_insert);
       } else {
-         $this->session->set_flashdata('warning', 'Data absensi sudah ada.');
+         $this->session->set_flashdata('warning', 'Sudah melakukan absen pada hari ini.');
       }
 
       // Set flash data berdasarkan apakah ada data yang belum ada
@@ -186,26 +180,24 @@ class Absensi extends CI_Controller
    public function proses_ubah()
    {
       $id_absen = $this->input->post('id_absen');
-      $waktu = $this->input->post('waktu');
-      $estimated = $this->input->post('estimated');
-      $lokasi_kerja = $this->input->post('lokasi_kerja');
-      $shift_line = $this->input->post('shift_line');
-      $jam_masuk_alternatif = $this->input->post('jam_masuk_alternatif');
-      $jam_pulang_alternatif = $this->input->post('jam_pulang_alternatif');
-      $kondisi_kesehatan = $this->input->post('kondisi_kesehatan');
-      $keterangan = $this->input->post('keterangan');
-      $catatan = $this->input->post('catatan');
+      $shift = $this->input->post('shift');
+      $status = $this->input->post('status');
+      $jam_masuk_reguler = $this->input->post('jam_masuk_reguler');
+      $jam_pulang_reguler = $this->input->post('jam_pulang_reguler');
+      $jam_masuk_lembur = $this->input->post('jam_masuk_lembur');
+      $jam_pulang_lembur = $this->input->post('jam_pulang_lembur');
+      $aktivitas = $this->input->post('aktivitas');
+      $tanggal = $this->input->post('tanggal');
 
       $data = array(
-         'waktu' => $waktu,
-         'estimated' => $estimated,
-         'lokasi_kerja' => $lokasi_kerja,
-         'shift_line' => $shift_line,
-         'jam_masuk_alternatif' => $jam_masuk_alternatif,
-         'jam_pulang_alternatif' => $jam_pulang_alternatif,
-         'kondisi_kesehatan' => $kondisi_kesehatan,
-         'keterangan' => $keterangan,
-         'catatan' => $catatan,
+         'shift' => $shift,
+         'status' => $status,
+         'jam_masuk_reguler' => $jam_masuk_reguler,
+         'jam_pulang_reguler' => $jam_pulang_reguler,
+         'jam_masuk_lembur' => $jam_masuk_lembur,
+         'jam_pulang_lembur' => $jam_pulang_lembur,
+         'aktivitas' => $aktivitas,
+         'tanggal' => $tanggal,
       );
 
       $where = array(

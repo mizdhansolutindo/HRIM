@@ -124,9 +124,10 @@ class Absensi extends CI_Controller
       $jam_masuk_lembur = $this->input->post('jam_masuk_lembur');
       $jam_pulang_lembur = $this->input->post('jam_pulang_lembur');
       $aktivitas = $this->input->post('aktivitas');
+      $tanggal = $this->input->post('tanggal');
 
       // Tambahkan tgl_pembayaran dengan tanggal hari ini
-      $tanggal = date('Y-m-d');
+      $time = date('Y-m-d');
 
       // Inisialisasi array untuk mengumpulkan data yang akan disimpan
       $data_to_insert = array();
@@ -138,7 +139,7 @@ class Absensi extends CI_Controller
 
          // Periksa apakah data sudah ada di database untuk user_id dan tanggal tertentu
          $this->db->where('user_id', $user_id_value);
-         $this->db->where('tanggal', $tanggal);
+         $this->db->where('tanggal', $time);
          $query = $this->db->get('absen');
 
          // Jika sudah ada data, skip inputan ini
@@ -156,7 +157,7 @@ class Absensi extends CI_Controller
             'jam_masuk_lembur' => $jam_masuk_lembur[$i],
             'jam_pulang_lembur' => $jam_pulang_lembur[$i],
             'aktivitas' => $aktivitas[$i],
-            'tanggal' => $tanggal,
+            'tanggal' => $tanggal[$i],
          );
          $data_missing = true; // Set flag bahwa ada data yang belum ada di database
       }

@@ -10,7 +10,7 @@
               <div class="widget widget-chart-three">
                  <div class="widget-heading">
                     <div class="">
-                       <h5 class="">Tambah Data Keseluruhan</h5>
+                       <h5 class="">Input Data Absensi</h5>
                     </div>
 
                     <div class="dropdown ">
@@ -22,22 +22,43 @@
 
                  <div class="widget-content">
                     <div class="widget-content widget-content-area br-6">
-
                        <form onsubmit="return validateForm();" method="POST" action="<?= base_url('other/absensi/proses_multiple'); ?>">
                           <table id="zero-config1" class="table table-striped" style="width:100%">
                              <thead>
                                 <tr>
-                                   <th>Nama Karyawan</th>
-                                   <th>Jabatan</th>
-                                   <th>Waktu Absen</th>
-                                   <th>Lokasi Kerja</th>
-                                   <th>Shift Time</th>
-                                   <th>Jam Alternatif</th>
-                                   <th>Aktivitas</th>
-                                   <th>Kesehatan</th>
-                                   <th>Keterangan</th>
-                                   <th>Qty Kinerja</th>
-                                   <th>Catatan</th>
+                                   <th>
+                                      <center>Nama Karyawan
+                                   </th>
+                                   <th>
+                                      <center>Departement
+                                   </th>
+                                   <th>
+                                      <center>Jabatan
+                                   </th>
+                                   <th>
+                                      <center>Tgl Absensi
+                                   </th>
+                                   <th>
+                                      <center>Shift
+                                   </th>
+                                   <th>
+                                      <center>Status
+                                   </th>
+                                   <th>
+                                      <center>Jam Masuk Reguler
+                                   </th>
+                                   <th>
+                                      <center>Jam Pulang Reguler
+                                   </th>
+                                   <th>
+                                      <center>Jam Masuk Lembur
+                                   </th>
+                                   <th>
+                                      <center>Jam Pulang Lembur
+                                   </th>
+                                   <th>
+                                      <center>Aktivitas
+                                   </th>
                                 </tr>
                              </thead>
                              <tbody>
@@ -45,54 +66,59 @@
                                  foreach ($add as $row) : ?>
                                    <tr>
                                       <td>
-                                         <input type="hidden" name="user_id[]" value="<?= $row->user_id; ?>">
-                                         <?= $row->nama_karyawan; ?>
+                                         <center>
+                                            <input type="hidden" name="user_id[]" value="<?= $row->user_id; ?>">
+                                            <strong> <?= $row->nama_karyawan; ?></strong> <br> <?= $row->id_karyawan; ?>
                                       </td>
                                       <td>
-                                         <?= $row->nama_jabatan; ?>
-                                      </td>
-                                      <td><input type="datetime-local" name="waktu[]" class="form-control" style="width: 250px;"></td>
-                                      <td><input type="text" class="form-control" name="lokasi_kerja[]" placeholder="Latitude: -6.2114, Longitude: 106.8446" style="width: 350px;"></td>
-                                      <td>
-                                         <select id="shiftSelect" name="shift_line[]" class="form-control" onchange="showTime(this)" style="width: 130px;">
-                                            <option hidden>Shift</option>
-                                            <option value="08.00 - 17.00">08.00 - 17.00</option>
-                                            <option value="09.00 - 18.00">09.00 - 18.00</option>
-                                            <option value="Paruh Waktu">Paruh Waktu</option>
-                                         </select>
+                                         <center>
+                                            <span class="text-muted"> <strong><?= $row->nama_departement; ?></strong></span>
                                       </td>
                                       <td>
-                                         <div class="alternatif" style="display: none;">
-                                            <input type="text" name="jam_masuk_alternatif[]" placeholder="Jam Masuk">
-                                            <input type="text" name="jam_pulang_alternatif[]" placeholder="Jam Pulang">
-                                         </div>
-                                      </td>
-                                      <td><input type="text" class="form-control" name="aktivitas[]" style="width: 250px;"></td>
-                                      <td>
-                                         <select name="kondisi_kesehatan[]" class="form-control" style="width: 130px;">
-                                            <option hidden>Kondisi</option>
-                                            <option value="SEHAT">SEHAT</option>
-                                            <option value="TIDAK FIT">TIDAK FIT</option>
-                                            <option value="SAKIT">SAKIT</option>
-                                         </select>
+                                         <center>
+                                            <span class="text-muted"> <strong><?= $row->nama_jabatan; ?></strong></span>
                                       </td>
                                       <td>
-                                         <select name="keterangan[]" class="form-control" onchange="showQty(this)" style="width: 130px;">
-                                            <option hidden value="masuk">Status</option>
-                                            <option value="masuk">masuk</option>
-                                            <option value="pulang">pulang</option>
-                                         </select>
+                                         <center><input type="date" class="form-control form-control-sm" name="tanggal[]" placeholder="00.00" style="width: 190px;">
                                       </td>
-                                      <td><input type="number" name="kinerja[]" class="form-control qty" style="display: none;"></td>
-                                      <td><input type="text" name="catatan[]" class="form-control" style="width: 250px;"></td>
+                                      <td>
+                                         <center>
+                                            <select name="shift[]" class="form-control form-control-sm" style="width: 160px;">
+                                               <option value="07.00 - 16.00">07.00 - 16.00</option>
+                                               <option value="14.00 - 23.00">14.00 - 23.00</option>
+                                            </select>
+                                      </td>
+                                      <td style="text-align: center;">
+                                         <center>
+                                            <select name="status[]" class="form-control form-control-sm" style="width: 130px;">
+                                               <option value="Masuk">Masuk</option>
+                                               <option value="Cuti">Cuti</option>
+                                               <option value="Izin">Izin</option>
+                                               <option value="Alpha">Alpha</option>
+                                               <option value="Sakit">Sakit</option>
+                                            </select>
+                                      </td>
+                                      <td>
+                                         <center><input type="time" class="form-control form-control-sm" name="jam_masuk_reguler[]" placeholder="00.00" style="width: 170px;">
+                                      </td>
+                                      <td>
+                                         <center><input type="time" class="form-control form-control-sm" name="jam_pulang_reguler[]" placeholder="00.00" style="width: 170px;">
+                                      </td>
+                                      <td>
+                                         <center><input type="time" class="form-control form-control-sm" name="jam_masuk_lembur[]" placeholder="00.00" style="width: 170px;">
+                                      </td>
+                                      <td>
+                                         <center><input type="time" class="form-control form-control-sm" name="jam_pulang_lembur[]" placeholder="00.00" style="width: 170px;">
+                                      </td>
+                                      <td>
+                                         <center><input type="text" class="form-control form-control-sm" name="aktivitas[]" placeholder="0" style="width: 140px;">
+                                      </td>
                                    </tr>
                                 <?php endforeach; ?>
                              </tbody>
                           </table>
                           <button type="submit" class="btn btn-secondary mb-3 ml-3">Simpan</button>
                        </form>
-
-
                     </div>
                  </div>
               </div>
@@ -112,13 +138,11 @@
                           <thead>
                              <tr>
                                 <th>Tanggal</th>
-                                <th>Nama</th>
-                                <th>Waktu Kerja</th>
-                                <th>Kondisi</th>
-                                <th>Aktivitas</th>
-                                <th>Waktu Absen</th>
-                                <th>Lokasi</th>
-                                <th>Keterangan</th>
+                                <th>Nama Karyawan</th>
+                                <th>Shift</th>
+                                <th>Status</th>
+                                <th>Jam Masuk</th>
+                                <th>Jam Pulang</th>
                                 <th class="no-content"></th>
                              </tr>
                           </thead>
@@ -126,52 +150,27 @@
                              <?php $no = 1;
                               foreach ($absen as $row) : ?>
                                 <tr>
-                                   <td><?php echo date('d F Y', strtotime($row->estimated)); ?></td>
+                                   <td><?php echo date('d F Y', strtotime($row->tanggal)); ?></td>
                                    <td><strong><?= $row->nama_karyawan ?></strong> <br><?= $row->id_karyawan ?></td>
-                                   <td><strong><?= $row->shift_line ?></strong> <br><?= $row->jam_masuk_alternatif ?> - <?= $row->jam_pulang_alternatif ?></td>
-                                   <td><strong><?= $row->kondisi_kesehatan ?></strong></td>
-                                   <td><?= $row->aktivitas ?></td>
+                                   <td><strong><?= $row->shift ?></strong></td>
                                    <td>
-                                      <?php
-                                       // Mengatur zona waktu ke WIB
-                                       date_default_timezone_set('Asia/Jakarta');
-
-                                       // Mengambil data waktu dari $row->waktu dan mengonversinya ke format yang diinginkan
-                                       $waktu = strtotime($row->waktu);
-                                       $formattedTime = date('d F Y, H:i', $waktu);
-
-                                       // Menambahkan informasi WIB
-                                       $formattedTimeWithWIB = $formattedTime . ' WIB';
-
-                                       echo $formattedTimeWithWIB;
-                                       ?>
-                                   </td>
-                                   <?php
-                                    // Mencari koordinat Latitude dan Longitude dalam string
-                                    preg_match('/Latitude: ([-\d.]+), Longitude: ([-\d.]+)/', $row->lokasi_kerja, $matches);
-
-                                    if (count($matches) == 3) {
-                                       // Ambil nilai Latitude dan Longitude
-                                       $latitude = trim($matches[1]);
-                                       $longitude = trim($matches[2]);
-
-                                       // URL Google Maps dengan koordinat Latitude dan Longitude
-                                       $mapsUrl = "https://www.google.com/maps?q={$latitude},{$longitude}";
-                                    } else {
-                                       $mapsUrl = '#'; // Tautan tidak valid jika format tidak sesuai
-                                    }
-                                    ?>
-                                   <td><a target="_blank" href="<?= $mapsUrl ?>" class="text-secondary"><i class="fas fa-location-dot"></i>&nbsp; Lihat Lokasi</a></td>
-                                   <td>
-                                      <?php if ($row->keterangan == "masuk") { ?>
+                                      <?php if ($row->status == "Masuk") { ?>
                                          <span class="badge badge-success"> Masuk </span>
-                                      <?php } else { ?>
-                                         <span class="badge badge-danger"> Pulang </span>
+                                      <?php } else if ($row->status == "Cuti") { ?>
+                                         <span class="badge badge-warning"> Cuti </span>
+                                      <?php } else if ($row->status == "Izin") { ?>
+                                         <span class="badge badge-primary"> Izin </span>
+                                      <?php } else if ($row->status == "Alpha") { ?>
+                                         <span class="badge badge-dark"> Alpha </span>
+                                      <?php } else if ($row->status == "Sakit") { ?>
+                                         <span class="badge badge-secondary"> Sakit </span>
                                       <?php } ?>
                                    </td>
+                                   <td><strong><?= $row->jam_masuk_reguler ?></strong></td>
+                                   <td><strong><?= $row->jam_pulang_reguler ?></strong></td>
                                    <td>
                                       <a class="btn btn-sm btn-outline-primary" href="javascript:void(0);" data-toggle="modal" data-target="#exampleModalCenter<?= $row->id_absen ?>">Edit</a>&nbsp;
-                                      <a class="btn btn-sm btn-outline-danger" href="<?= site_url('other/absensi/delete/' . $row->id_absen) ?>">Hapus</a>
+                                      <a class="btn btn-sm btn-outline-danger" href="<?= site_url('admin/absensi/delete/' . $row->id_absen) ?>">Hapus</a>
                                    </td>
                                 </tr>
                              <?php endforeach; ?>
@@ -188,8 +187,6 @@
   </div>
   <!--  END CONTENT AREA  -->
 
-
-  <!-- Modal create-->
   <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
      <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -221,6 +218,7 @@
      </div>
   </div>
 
+
   <?php foreach ($absen as $row) : ?>
      <div class="modal fade" id="exampleModalCenter<?= $row->id_absen ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
@@ -238,76 +236,56 @@
                  <div class="modal-body">
                     <div class="row">
 
-                       <div class="col-md-6">
-                          <label class="ml-1">Tanggal Absensi <span class="text-danger">*</span></label>
+                       <div class="col-md-12">
+                          <label class="ml-1">Tanggal Absensi </label>
                           <input type="hidden" name="id_absen" value="<?= $row->id_absen ?>">
-                          <input type="datetime-local" name="waktu" class="form-control" value="<?= $row->waktu ?>">
+                          <input type="date" name="tanggal" class="form-control" value="<?= $row->tanggal ?>">
                        </div>
-
-                       <div class="col-md-6">
-                          <label class="ml-1">Tanggal input <span class="text-danger">*</span></label>
-                          <input type="date" name="estimated" class="form-control" value="<?= $row->estimated ?>">
-                       </div>
-
-                       <div class="col-md-12 mt-3">
-                          <label class="ml-1">Lokasi Kerja <span class="text-danger">*</span></label>
-                          <input type="text" name="lokasi_kerja" class="form-control" <?= $row->lokasi_kerja !== '' ? 'value="' . $row->lokasi_kerja . '"' : 'placeholder="Latitude: -6.2114, Longitude: 106.8446"' ?>>
-                       </div>
-
-                       <?php if ($row->shift_line == "Paruh Waktu") { ?>
-                          <div class="col-md-6 mt-3">
-                             <label class="ml-1">Shift Kerja <span class="text-danger">*</span></label>
-                             <select name="shift_line" class="form-control">
-                                <option hidden value="<?= $row->shift_line ?>"><?= $row->shift_line ?></option>
-                                <option value="08.00 - 17.00">08.00 - 17.00</option>
-                                <option value="09.00 - 18.00">09.00 - 18.00</option>
-                                <option value="Paruh Waktu">Paruh Waktu</option>
-                             </select>
-                          </div>
-
-                          <div class="col-md-3 mt-3">
-                             <label class="ml-1">Jam Masuk <span class="text-danger">*</span></label>
-                             <input type="text" class="form-control" name="jam_masuk_alternatif" value="<?= $row->jam_masuk_alternatif ?>">
-                          </div>
-
-                          <div class="col-md-3 mt-3">
-                             <label class="ml-1">Jam Pulang <span class="text-danger">*</span></label>
-                             <input type="text" class="form-control" name="jam_pulang_alternatif" value="<?= $row->jam_pulang_alternatif ?>">
-                          </div>
-                       <?php } else { ?>
-                          <div class="col-md-12 mt-3">
-                             <label class="ml-1">Shift Kerja <span class="text-danger">*</span></label>
-                             <select name="shift_line" class="form-control">
-                                <option hidden value="<?= $row->shift_line ?>"><?= $row->shift_line ?></option>
-                                <option value="08.00 - 17.00">08.00 - 17.00</option>
-                                <option value="09.00 - 18.00">09.00 - 18.00</option>
-                                <option value="Paruh Waktu">Paruh Waktu</option>
-                             </select>
-                          </div>
-                       <?php } ?>
 
                        <div class="col-md-6 mt-3">
-                          <label class="ml-1">Kondisi Kesehatan <span class="text-danger">*</span></label>
-                          <select name="kondisi_kesehatan" class="form-control">
-                             <option hidden value="<?= $row->kondisi_kesehatan ?>"><?= $row->kondisi_kesehatan ?></option>
-                             <option value="SEHAT">SEHAT</option>
-                             <option value="TIDAK FIT">TIDAK FIT</option>
-                             <option value="SAKIT">SAKIT</option>
+                          <label class="ml-1">Shift </label>
+                          <select name="shift" class="form-control">
+                             <option hidden value="<?= $row->shift ?>"><?= $row->shift ?></option>
+                             <option value="08.00 - 17.00">08.00 - 17.00</option>
+                             <option value="09.00 - 18.00">09.00 - 18.00</option>
                           </select>
                        </div>
 
                        <div class="col-md-6 mt-3">
-                          <label class="ml-1">Keterangan Absen <span class="text-danger">*</span></label>
-                          <select name="keterangan" class="form-control">
-                             <option hidden value="<?= $row->keterangan ?>"><?= $row->keterangan ?></option>
-                             <option value="masuk">masuk</option>
-                             <option value="pulang">pulang</option>
+                          <label class="ml-1">Status Absen </label>
+                          <select name="status" class="form-control">
+                             <option hidden value="<?= $row->status ?>"><?= $row->status ?></option>
+                             <option value="Masuk">Masuk</option>
+                             <option value="Cuti">Cuti</option>
+                             <option value="Izin">Izin</option>
+                             <option value="Alpha">Alpha</option>
+                             <option value="Sakit">Sakit</option>
                           </select>
                        </div>
 
-                       <div class="col-md-12 mt-3">
-                          <label class="ml-1">Catatan <span class="text-danger">*</span></label>
-                          <input type="text" class="form-control" name="catatan" value="<?= $row->catatan ?>">
+                       <div class="col-md-6 mt-3">
+                          <label class="ml-1">Jam Masuk </label>
+                          <input type="time" name="jam_masuk_reguler" class="form-control" value="<?= $row->jam_masuk_reguler ?>">
+                       </div>
+
+                       <div class="col-md-6 mt-3">
+                          <label class="ml-1">Jam Pulang </label>
+                          <input type="time" name="jam_pulang_reguler" class="form-control" value="<?= $row->jam_pulang_reguler ?>">
+                       </div>
+
+                       <div class="col-md-3 mt-3">
+                          <label class="ml-1">Jam Masuk Lembur </label>
+                          <input type="time" name="jam_masuk_lembur" class="form-control" value="<?= $row->jam_masuk_lembur ?>">
+                       </div>
+
+                       <div class="col-md-3 mt-3">
+                          <label class="ml-1">Jam Pulang Lembur</label>
+                          <input type="time" name="jam_pulang_lembur" class="form-control" value="<?= $row->jam_pulang_lembur ?>">
+                       </div>
+
+                       <div class="col-md-6 mt-3">
+                          <label class="ml-1">Aktivitas</label>
+                          <input type="number" name="aktivitas" class="form-control" value="<?= $row->aktivitas ?>">
                        </div>
 
                     </div>
@@ -321,31 +299,3 @@
         </div>
      </div>
   <?php endforeach; ?>
-
-  <script>
-     function showQty(select) {
-        var qtyField = select.parentElement.parentElement.querySelector('.qty');
-        qtyField.style.display = select.value === 'pulang' ? 'block' : 'none';
-     }
-  </script>
-
-  <script>
-     function showTime(select) {
-        var timeField = select.parentElement.parentElement.querySelector('.alternatif');
-        timeField.style.display = select.value === 'Paruh Waktu' ? 'block' : 'none';
-     }
-  </script>
-
-  <script>
-     function validateForm() {
-        var selectBox = document.getElementById("shiftSelect");
-        var selectedOption = selectBox.options[selectBox.selectedIndex];
-
-        if (selectedOption.value === 'Shift') {
-           alert("Harap pilih opsi Shift yang valid.");
-           return false; // Mencegah form dari submit
-        }
-
-        return true; // Izinkan form untuk submit
-     }
-  </script>
