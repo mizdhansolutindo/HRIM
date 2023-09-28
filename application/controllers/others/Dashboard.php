@@ -74,8 +74,8 @@ class Dashboard extends CI_Controller
         // Query untuk menghitung jumlah data user_id dengan keterangan masuk pada hari ini
         $query = $this->db->select('COUNT(DISTINCT user_id) AS jumlah_masuk')
             ->from('absen')
-            ->where('keterangan', 'masuk')
-            ->where('DATE(waktu)', $currentDate)
+            ->where('status', 'Masuk')
+            ->where('DATE(tanggal)', $currentDate)
             ->get();
 
         $result = $query->row();
@@ -103,17 +103,17 @@ class Dashboard extends CI_Controller
             $total_jam_kerja = 0;
 
             // Query untuk mengambil data absen per bulan per karyawan
-            $query = $this->db->select('DATE(absen.waktu) AS tanggal, absen.keterangan')
+            $query = $this->db->select('DATE(absen.tanggal), absen.status')
                 ->from('absen')
-                ->where('MONTH(absen.waktu)', $currentMonth)
-                ->where('YEAR(absen.waktu)', $currentYear)
+                ->where('MONTH(absen.tanggal)', $currentMonth)
+                ->where('YEAR(absen.tanggal)', $currentYear)
                 ->where('absen.user_id', $karyawan->user_id)
                 ->get();
 
             $absenData = $query->result();
 
             foreach ($absenData as $absen) {
-                if ($absen->keterangan == 'pulang') {
+                if ($absen->status == 'Masuk') {
                     $total_jam_kerja += 6; // Menghitung 6 jam per "masuk"
                 }
             }
