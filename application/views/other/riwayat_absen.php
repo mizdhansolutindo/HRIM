@@ -170,7 +170,7 @@
                                    <td><strong><?= $row->jam_pulang_reguler ?></strong></td>
                                    <td>
                                       <a class="btn btn-sm btn-outline-primary" href="javascript:void(0);" data-toggle="modal" data-target="#exampleModalCenter<?= $row->id_absen ?>">Edit</a>&nbsp;
-                                      <a class="btn btn-sm btn-outline-danger" href="<?= site_url('admin/absensi/delete/' . $row->id_absen) ?>">Hapus</a>
+                                      <a class="btn btn-sm btn-outline-danger" href="<?= site_url('other/absensi/delete/' . $row->id_absen) ?>">Hapus</a>
                                    </td>
                                 </tr>
                              <?php endforeach; ?>
