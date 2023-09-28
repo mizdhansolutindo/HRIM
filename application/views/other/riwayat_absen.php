@@ -99,19 +99,19 @@
                                             </select>
                                       </td>
                                       <td>
-                                         <center><input type="time" class="form-control form-control-sm" name="jam_masuk_reguler[]" placeholder="00.00" style="width: 170px;">
+                                         <center><input type="time" class="form-control form-control-sm" name="jam_masuk_reguler[]" required placeholder="00.00" style="width: 170px;">
                                       </td>
                                       <td>
-                                         <center><input type="time" class="form-control form-control-sm" name="jam_pulang_reguler[]" placeholder="00.00" style="width: 170px;">
+                                         <center><input type="time" class="form-control form-control-sm" name="jam_pulang_reguler[]" required placeholder="00.00" style="width: 170px;">
                                       </td>
                                       <td>
-                                         <center><input type="time" class="form-control form-control-sm" name="jam_masuk_lembur[]" placeholder="00.00" style="width: 170px;">
+                                         <center><input type="time" class="form-control form-control-sm" name="jam_masuk_lembur[]" required placeholder="00.00" style="width: 170px;">
                                       </td>
                                       <td>
-                                         <center><input type="time" class="form-control form-control-sm" name="jam_pulang_lembur[]" placeholder="00.00" style="width: 170px;">
+                                         <center><input type="time" class="form-control form-control-sm" name="jam_pulang_lembur[]" required placeholder="00.00" style="width: 170px;">
                                       </td>
                                       <td>
-                                         <center><input type="text" class="form-control form-control-sm" name="aktivitas[]" placeholder="0" style="width: 140px;">
+                                         <center><input type="text" class="form-control form-control-sm" name="aktivitas[]" required placeholder="0" style="width: 140px;">
                                       </td>
                                    </tr>
                                 <?php endforeach; ?>
